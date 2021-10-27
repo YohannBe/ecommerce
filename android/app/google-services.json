@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "545267966833",
+    "project_id": "fluttertest-d95c4",
+    "storage_bucket": "fluttertest-d95c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545267966833:android:9d5c8c6b609cddc7b60cd0",
+        "android_client_info": {
+          "package_name": "com.example.shoppify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545267966833-j48kqmbg5isbqucqs1n18m4bjodq44g9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqDIBtTOiwPJUzETM9VKq7u1-YjvykS6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545267966833-j48kqmbg5isbqucqs1n18m4bjodq44g9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:shoppify/constant.dart';
+import 'package:shoppify/screens/sign_in/sign_in_screen.dart';
+import 'package:shoppify/size_config.dart';
 import '../components/splash_content.dart';
+import '../../../components/default_button.dart';
+import 'dot_builder.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -37,7 +42,7 @@ class _BodyState extends State<Body> {
             Expanded(
               flex: 3,
               child: PageView.builder(
-                onPageChanged: (value){
+                onPageChanged: (value) {
                   setState(() {
                     currentPage = value;
                   });
@@ -51,40 +56,39 @@ class _BodyState extends State<Body> {
             ),
             Expanded(
                 flex: 2,
-                child: Column(
-                  children: [
-                    Row(
-                      children: List.generate(
-                        splashData.length,
-                        (index) => BuildDot(index: index, currentPage: currentPage,),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(20)),
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          splashData.length,
+                          (index) => BuildDot(
+                            index: index,
+                            currentPage: currentPage,
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+                      Spacer(
+                        flex: 4,
+                      ),
+                      DefaultButton(
+                        text: "Continue",
+                        press: () {
+                          log('data: laaaaaaaaaaa');
+                          Navigator.pushNamed(context, SignInScreen.routeName);
+                        },
+                      ),
+                      Spacer(),
+                    ],
+                  ),
                 ))
           ],
         ),
       ),
-    );
-  }
-}
-
-class BuildDot extends StatelessWidget {
-  const BuildDot({
-    Key? key, required this.index, required this.currentPage,
-  }) : super(key: key);
-
-  final int index;
-  final int currentPage;
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: kThemeAnimationDuration,
-      margin: EdgeInsets.only(right: 5),
-      height: 6,
-      width: currentPage == index ? 20 : 6,
-      decoration: BoxDecoration(
-          color: currentPage == index ? kPrimaryColor : Colors.black12,
-          borderRadius: BorderRadius.circular(3)),
     );
   }
 }

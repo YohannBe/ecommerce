@@ -3,6 +3,7 @@ import 'package:shoppify/screens/splash/components/body.dart';
 import 'package:shoppify/size_config.dart';
 
 class SplashScreen extends StatelessWidget {
+  static String routeName = '/splash';
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
