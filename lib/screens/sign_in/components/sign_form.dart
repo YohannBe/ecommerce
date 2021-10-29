@@ -1,13 +1,18 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:shoppify/components/custom_suffix_icon.dart';
 import 'package:shoppify/components/default_button.dart';
 import 'package:shoppify/components/form_error.dart';
-import 'package:shoppify/network/firebase_mananger.dart';
+import 'package:shoppify/components/loading.dart';
+import 'package:shoppify/network/authentication_service.dart';
+import 'package:shoppify/network/firebase_manager.dart';
 import 'package:shoppify/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shoppify/screens/home_connected/home_connected.dart';
 
 import '../../../constant.dart';
 import '../../../size_config.dart';
@@ -20,66 +25,79 @@ class SignForm extends StatefulWidget {
 }
 
 class _SignFormState extends State<SignForm> {
+  final AuthenticationService _authenticationService =
+      AuthenticationService();
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
   String? mail, password;
   bool remember = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          buildTextFormFieldEmail(Icons.mail_outline_outlined),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          buildTextFormFieldPassword(Icons.lock_outlined),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          Row(
-            children: [
-              Checkbox(
-                activeColor: kPrimaryColor,
-                value: remember,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value!;
-                  });
-                },
-              ),
-              Text("Remember me"),
-              Spacer(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(
-                    context, ForgotPasswordScreen.routeName),
-                child: Text(
-                  "Forgot passord",
-                  style: TextStyle(decoration: TextDecoration.underline),
+    return loading
+        ? Loading()
+        : Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: getProportionateScreenHeight(20),
                 ),
-              )
-            ],
-          ),
-          FormError(errors: errors),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          DefaultButton(
-              text: "Continue",
-              press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  AddUser(mail!, password!).addUser(mail!, password!);
-                }
-              }),
-        ],
-      ),
-    );
+                buildTextFormFieldEmail(Icons.mail_outline_outlined),
+                SizedBox(
+                  height: getProportionateScreenHeight(20),
+                ),
+                buildTextFormFieldPassword(Icons.lock_outlined),
+                SizedBox(
+                  height: getProportionateScreenHeight(20),
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      activeColor: kPrimaryColor,
+                      value: remember,
+                      onChanged: (value) {
+                        setState(() {
+                          remember = value!;
+                        });
+                      },
+                    ),
+                    Text("Remember me"),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                          context, ForgotPasswordScreen.routeName),
+                      child: Text(
+                        "Forgot passord",
+                        style: TextStyle(decoration: TextDecoration.underline),
+                      ),
+                    )
+                  ],
+                ),
+                FormError(errors: errors),
+                SizedBox(
+                  height: getProportionateScreenHeight(20),
+                ),
+                DefaultButton(
+                    text: "Continue",
+                    press: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        dynamic result = await _authenticationService.signIn(email: mail!, password: password!);
+                        if (result == null) {
+                          setState(() {
+                            //loading = false;
+                          });
+                        } else{
+                          Navigator.pushReplacementNamed(
+                              context, HomeConnected.routeName);
+                        }
+                      }
+                    }),
+              ],
+            ),
+          );
   }
 
   TextFormField buildTextFormFieldPassword(IconData iconData) {
@@ -91,7 +109,7 @@ class _SignFormState extends State<SignForm> {
             errors.remove(kPassNullError);
           });
         } else if (value.isNotEmpty &&
-            value.length >= 8 &&
+            value.length >= 6 &&
             errors.contains(kShortPassError)) {
           setState(() {
             errors.remove(kShortPassError);
@@ -104,7 +122,7 @@ class _SignFormState extends State<SignForm> {
             errors.add(kPassNullError);
           });
         } else if (value.isNotEmpty &&
-            value.length < 8 &&
+            value.length < 6 &&
             !errors.contains(kShortPassError)) {
           setState(() {
             errors.add(kShortPassError);

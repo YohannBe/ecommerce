@@ -1,11 +1,9 @@
 
-class User{
+class AppUser{
 
-  String? mail;
-  String? password;
+  String? mail, firstName, lastName, picture;
+  String? uid;
+  int? age;
 
-  User(String mail, String password){
-    this.mail = mail;
-    this.password = password;
-  }
+  AppUser({this.mail, this.uid});
 }

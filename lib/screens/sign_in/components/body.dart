@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoppify/components/no_account_text.dart';
 import 'package:shoppify/components/social_card.dart';
+import 'package:shoppify/screens/create_account_screen/register_account_screen.dart';
 import 'package:shoppify/screens/sign_in/components/sign_form.dart';
 import 'package:shoppify/size_config.dart';
 
@@ -58,7 +59,13 @@ class Body extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
-                NoAccountText()
+                NoAccountText(
+                    text1: "Don't have an account? ",
+                    text2: " Sign up",
+                    press: () {
+                      Navigator.pushNamed(
+                          context, CreateAccountScreen.routeName);
+                    })
               ],
             ),
           ),

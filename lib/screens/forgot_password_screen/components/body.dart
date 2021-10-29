@@ -3,6 +3,7 @@ import 'package:shoppify/components/custom_suffix_icon.dart';
 import 'package:shoppify/components/default_button.dart';
 import 'package:shoppify/components/form_error.dart';
 import 'package:shoppify/components/no_account_text.dart';
+import 'package:shoppify/screens/create_account_screen/register_account_screen.dart';
 import 'package:shoppify/size_config.dart';
 
 import '../../../constant.dart';
@@ -17,7 +18,8 @@ class Body extends StatelessWidget {
       width: double.infinity,
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+          padding:
+              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: Column(
             children: [
               Text(
@@ -66,15 +68,20 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
           SizedBox(
             height: SizeConfig.screenHeight * 0.1,
           ),
-          DefaultButton(text: "Continue", press: () {
-            if(_formKey.currentState!.validate()){
-
-            }
-          }),
+          DefaultButton(
+              text: "Continue",
+              press: () {
+                if (_formKey.currentState!.validate()) {}
+              }),
           SizedBox(
             height: SizeConfig.screenHeight * 0.1,
           ),
-          NoAccountText(),
+          NoAccountText(
+              text1: "Don't have an account? ",
+              text2: " Sign up",
+              press: () {
+                Navigator.pushNamed(context, CreateAccountScreen.routeName);
+              }),
         ],
       ),
     );

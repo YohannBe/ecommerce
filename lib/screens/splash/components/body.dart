@@ -1,6 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
+import 'package:shoppify/components/authentication_wrapper.dart';
+import 'package:shoppify/model/user_model.dart';
+import 'package:shoppify/network/authentication_service.dart';
+import 'package:shoppify/screens/home_connected/home_connected.dart';
 import 'package:shoppify/screens/sign_in/sign_in_screen.dart';
 import 'package:shoppify/size_config.dart';
 import '../components/splash_content.dart';
@@ -8,7 +13,9 @@ import '../../../components/default_button.dart';
 import 'dot_builder.dart';
 
 class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+  Body(this.user);
+
+   final AppUser? user;
 
   @override
   _BodyState createState() => _BodyState();
@@ -16,6 +23,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   int currentPage = 0;
+
   List<Map<String, String>> splashData = [
     {
       "text": "Welcome to Tokoto, Let’s shop!",
@@ -31,6 +39,7 @@ class _BodyState extends State<Body> {
       "image": "assets/images/zoro.PNG"
     },
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +86,16 @@ class _BodyState extends State<Body> {
                       ),
                       DefaultButton(
                         text: "Continue",
-                        press: () {
+                        press: (){
                           log('data: laaaaaaaaaaa');
-                          Navigator.pushNamed(context, SignInScreen.routeName);
+                          widget.user != null
+                              ? Navigator.pushNamed(
+                                  context, HomeConnected.routeName)
+                              : Navigator.pushNamed(
+                                  context, SignInScreen.routeName);
+                          //return widget.user != null ? HomeConnected(): SignInScreen();
+                          /*Navigator.pushNamed(
+                              context, SignInScreen.routeName);*/
                         },
                       ),
                       Spacer(),
